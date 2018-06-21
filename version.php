@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2018061904;
+$plugin->version  = 2018062000;
 $plugin->requires = 2015051100; // Moodle version.
 $plugin->component = 'qtype_mathexp';
 $plugin->maturity  = MATURITY_STABLE;
