@@ -15,28 +15,35 @@ define(['jquery'], function ($) {
         }), Et.superscript = Et.supscript = Et["^"] = Qt(rt, function (t, e) { t.supsub = "sup", t.htmlTemplate = '<span class="mq-supsub mq-non-leaf mq-sup-only"><span class="mq-sup">&0</span></span>', t.textTemplate = ["^"], t.finalizeTree = function () { this.upInto = this.sup = this.ends[Ct], this.sup.downOutOf = f, e.finalizeTree.call(this) } }), ot = Qt(O, function (t, e) { t.init = function (t, e) { var n = '<span class="mq-large-operator mq-non-leaf"><span class="mq-to"><span>&1</span></span><big>' + e + '</big><span class="mq-from"><span>&0</span></span></span>'; k.prototype.init.call(this, t, n) }, t.createLeftOf = function (t) { e.createLeftOf.apply(this, arguments), t.options.sumStartsWithNEquals && (I("n").createLeftOf(t), K().createLeftOf(t)) }, t.latex = function () { function t(t) { return 1 === t.length ? t : "{" + (t || " ") + "}" } return this.ctrlSeq + "_" + t(this.ends[Tt].latex()) + "^" + t(this.ends[Ct].latex()) }, t.parser = function () { var t, e = w.string, n = w.optWhitespace, i = w.succeed, s = x.block, r = this, o = r.blocks = [T(), T()]; for (t = 0; t < o.length; t += 1)o[t].adopt(r, r.ends[Ct], 0); return n.then(e("_").or(e("^"))).then(function (t) { var e = o["_" === t ? 0 : 1]; return s.then(function (t) { return t.children().adopt(e, e.ends[Ct], 0), i(r) }) }).many().result(r) }, t.finalizeTree = function () { this.downInto = this.ends[Tt], this.upInto = this.ends[Ct], this.ends[Tt].upOutOf = this.ends[Ct], this.ends[Ct].downOutOf = this.ends[Tt] } }), Et["∑"] = Et.sum = Et.summation = i(ot, "\\sum ", "&sum;"), Et["∏"] = Et.prod = Et.product = i(ot, "\\prod ", "&prod;"), Et.coprod = Et.coproduct = i(ot, "\\coprod ", "&#8720;"), at = Et.frac = Et.dfrac = Et.cfrac = Et.fraction = Qt(O, function (t, e) { t.ctrlSeq = "\\frac", t.htmlTemplate = '<span class="mq-fraction mq-non-leaf"><span class="mq-numerator">&0</span><span class="mq-denominator">&1</span><span style="display:inline-block;width:0">&#8203;</span></span>', t.textTemplate = ["(", ")/(", ")"], t.finalizeTree = function () { this.upInto = this.ends[Ct].upOutOf = this.ends[Tt], this.downInto = this.ends[Tt].downOutOf = this.ends[Ct] } }), lt = Et.over = At["/"] = Qt(at, function (e, n) { e.createLeftOf = function (e) { if (!this.replacedFragment) { for (var i = e[Tt]; i && !(i instanceof Q || i instanceof (Et.text || t) || i instanceof ot || "\\ " === i.ctrlSeq || /^[,;:]$/.test(i.ctrlSeq));)i = i[Tt]; i instanceof ot && i[Ct] instanceof rt && (i = i[Ct], i[Ct] instanceof rt && i[Ct].ctrlSeq != i.ctrlSeq && (i = i[Ct])), i !== e[Tt] && (this.replaces(Lt(i[Ct] || e.parent.ends[Tt], e[Tt])), e[Tt] = i) } n.createLeftOf.call(this, e) } }), ct = Et.sqrt = Et["√"] = Qt(O, function (t, e) { t.ctrlSeq = "\\sqrt", t.htmlTemplate = '<span class="mq-non-leaf"><span class="mq-scaled mq-sqrt-prefix">&radic;</span><span class="mq-non-leaf mq-sqrt-stem">&0</span></span>', t.textTemplate = ["sqrt(", ")"], t.parser = function () { return x.optBlock.then(function (t) { return x.block.map(function (e) { var n = ht(); return n.blocks = [t, e], t.adopt(n, 0, 0), e.adopt(n, t, 0), n }) }).or(e.parser.call(this)) }, t.reflow = function () { var t = this.ends[Ct].jQ; Y(t.prev(), 1, t.innerHeight() / +t.css("fontSize").slice(0, -2) - .1) } }), ut = Et.vec = Qt(O, function (t, e) { t.ctrlSeq = "\\vec", t.htmlTemplate = '<span class="mq-non-leaf"><span class="mq-vector-prefix">&rarr;</span><span class="mq-vector-stem">&0</span></span>', t.textTemplate = ["vec(", ")"] }), ht = Et.nthroot = Qt(ct, function (t, e) { t.htmlTemplate = '<sup class="mq-nthroot mq-non-leaf">&0</sup><span class="mq-scaled"><span class="mq-sqrt-prefix mq-scaled">&radic;</span><span class="mq-sqrt-stem mq-non-leaf">&1</span></span>', t.textTemplate = ["sqrt[", "](", ")"], t.latex = function () { return "\\sqrt[" + this.ends[Tt].latex() + "]{" + this.ends[Ct].latex() + "}" } }), ft = Qt(Qt(O, p), function (e, n) { e.init = function (t, e, i, s, r) { n.init.call(this, "\\left" + s, m, [e, i]), this.side = t, this.sides = {}, this.sides[Tt] = { ch: e, ctrlSeq: s }, this.sides[Ct] = { ch: i, ctrlSeq: r } }, e.numBlocks = function () { return 1 }, e.html = function () { return this.htmlTemplate = '<span class="mq-non-leaf"><span class="mq-scaled mq-paren' + (this.side === Ct ? " mq-ghost" : "") + '">' + this.sides[Tt].ch + '</span><span class="mq-non-leaf">&0</span><span class="mq-scaled mq-paren' + (this.side === Tt ? " mq-ghost" : "") + '">' + this.sides[Ct].ch + "</span></span>", n.html.call(this) }, e.latex = function () { return "\\left" + this.sides[Tt].ctrlSeq + this.ends[Tt].latex() + "\\right" + this.sides[Ct].ctrlSeq }, e.oppBrack = function (t, e, n) { return e instanceof ft && e.side && e.side !== -n && ("|" === this.sides[this.side].ch || e.side === -this.side) && (!t.restrictMismatchedBrackets || pt[this.sides[this.side].ch] === e.sides[e.side].ch || { "(": "]", "[": ")" }[this.sides[Tt].ch] === e.sides[Ct].ch) && e }, e.closeOpposing = function (t) { t.side = 0, t.sides[this.side] = this.sides[this.side], t.delimjQs.eq(this.side === Tt ? 0 : 1).removeClass("mq-ghost").html(this.sides[this.side].ch) }, e.createLeftOf = function (t) { var e, i, s; this.replacedFragment || (e = t.options, i = this.oppBrack(e, t[Tt], Tt) || this.oppBrack(e, t[Ct], Ct) || this.oppBrack(e, t.parent.parent)), i ? (s = this.side = -i.side, this.closeOpposing(i), i === t.parent.parent && t[s] && (Lt(t[s], t.parent.ends[s], -s).disown().withDirAdopt(-s, i.parent, i, i[s]).jQ.insDirOf(s, i.jQ), i.bubble("reflow"))) : (i = this, s = i.side, i.replacedFragment ? i.side = 0 : t[-s] && (i.replaces(Lt(t[-s], t.parent.ends[-s], s)), t[-s] = 0), n.createLeftOf.call(i, t)), s === Tt ? t.insAtLeftEnd(i.ends[Tt]) : t.insRightOf(i) }, e.placeCursor = t, e.unwrap = function () { this.ends[Tt].children().disown().adopt(this.parent, this, this[Ct]).jQ.insertAfter(this.jQ), this.remove() }, e.deleteSide = function (t, e, n) { var i, s, r, o = this.parent, a = this[t], l = o.ends[t]; if (t === this.side) return this.unwrap(), void (a ? n.insDirOf(-t, a) : n.insAtDirEnd(t, o)); if (i = n.options, s = !this.side, this.side = -t, this.oppBrack(i, this.ends[Tt].ends[this.side], t)) this.closeOpposing(this.ends[Tt].ends[this.side]), r = this.ends[Tt].ends[t], this.unwrap(), r.siblingCreated && r.siblingCreated(n.options, t), a ? n.insDirOf(-t, a) : n.insAtDirEnd(t, o); else { if (this.oppBrack(i, this.parent.parent, t)) this.parent.parent.closeOpposing(this), this.parent.parent.unwrap(); else { if (e && s) return this.unwrap(), void (a ? n.insDirOf(-t, a) : n.insAtDirEnd(t, o)); this.sides[t] = { ch: pt[this.sides[this.side].ch], ctrlSeq: pt[this.sides[this.side].ctrlSeq] }, this.delimjQs.removeClass("mq-ghost").eq(t === Tt ? 0 : 1).addClass("mq-ghost").html(this.sides[t].ch) } a ? (r = this.ends[Tt].ends[t], Lt(a, l, -t).disown().withDirAdopt(-t, this.ends[Tt], r, 0).jQ.insAtDirEnd(t, this.ends[Tt].jQ.removeClass("mq-empty")), r.siblingCreated && r.siblingCreated(n.options, t), n.insDirOf(-t, a)) : e ? n.insDirOf(t, this) : n.insAtDirEnd(t, this.ends[Tt]) } }, e.deleteTowards = function (t, e) { this.deleteSide(-t, !1, e) }, e.finalizeTree = function () { this.ends[Tt].deleteOutOf = function (t, e) { this.parent.deleteSide(t, !0, e) }, this.finalizeTree = this.intentionalBlur = function () { this.delimjQs.eq(this.side === Tt ? 1 : 0).removeClass("mq-ghost"), this.side = 0 } }, e.siblingCreated = function (t, e) { e === -this.side && this.finalizeTree() } }), pt = { "(": ")", ")": "(", "[": "]", "]": "[", "{": "}", "}": "{", "\\{": "\\}", "\\}": "\\{", "&lang;": "&rang;", "&rang;": "&lang;", "\\langle ": "\\rangle ", "\\rangle ": "\\langle ", "|": "|" }, d("("), d("["), d("{", "\\{"), Et.langle = i(ft, Tt, "&lang;", "&rang;", "\\langle ", "\\rangle "), Et.rangle = i(ft, Ct, "&lang;", "&rang;", "\\langle ", "\\rangle "), At["|"] = i(ft, Tt, "|", "|", "|", "|"), Et.left = Qt(O, function (t) { t.parser = function () { var t = w.regex, e = w.string, n = (w.succeed, w.optWhitespace); return n.then(t(/^(?:[([|]|\\\{)/)).then(function (i) { var s = "\\" === i.charAt(0) ? i.slice(1) : i; return x.then(function (r) { return e("\\right").skip(n).then(t(/^(?:[\])|]|\\\})/)).map(function (t) { var e = "\\" === t.charAt(0) ? t.slice(1) : t, n = ft(0, s, e, i, t); return n.blocks = [r], r.adopt(n, 0, 0), n }) }) }) } }), Et.right = Qt(O, function (t) { t.parser = function () { return w.fail("unmatched \\right") } }), dt = Et.binom = Et.binomial = Qt(Qt(O, p), function (t, e) { t.ctrlSeq = "\\binom", t.htmlTemplate = '<span class="mq-non-leaf"><span class="mq-paren mq-scaled">(</span><span class="mq-non-leaf"><span class="mq-array mq-non-leaf"><span>&0</span><span>&1</span></span></span><span class="mq-paren mq-scaled">)</span></span>', t.textTemplate = ["choose(", ",", ")"] }), mt = Et.choose = Qt(dt, function (t) { t.createLeftOf = lt.prototype.createLeftOf }), Et.editable = Et.MathQuillMathField = Qt(O, function (t, e) { t.ctrlSeq = "\\MathQuillMathField", t.htmlTemplate = '<span class="mq-editable-field"><span class="mq-root-block">&0</span></span>', t.parser = function () { var t = this, n = w.string, i = w.regex, s = w.succeed; return n("[").then(i(/^[a-z][a-z0-9]*/i)).skip(n("]")).map(function (e) { t.name = e }).or(s()).then(e.parser.call(t)) }, t.finalizeTree = function () { var t = zt(this.ends[Tt], this.jQ, Bt()); t.KIND_OF_MQ = "MathField", t.editable = !0, t.createTextarea(), t.editablesTextareaEvents(), t.cursor.insAtRightEnd(t.root), u(t.root) }, t.registerInnerField = function (t, e) { t.push(t[this.name] = e(this.ends[Tt].controller)) }, t.latex = function () { return this.ends[Tt].latex() }, t.text = function () { return this.ends[Tt].text() } }), gt = Et.embed = Qt(k, function (t, e) { t.setOptions = function (t) { function e() { return "" } return this.text = t.text || e, this.htmlTemplate = t.htmlString || "", this.latex = t.latex || e, this }, t.parser = function () { var t = this; return string = w.string, regex = w.regex, succeed = w.succeed, string("{").then(regex(/^[a-z][a-z0-9]*/i)).skip(string("}")).then(function (e) { return string("[").then(regex(/^[-\w\s]*/)).skip(string("]")).or(succeed()).map(function (n) { return t.setOptions(Nt[e](n)) }) }) } }), bt = c(1); for (vt in bt) (function (t, e) { "function" == typeof e ? (l[t] = function () { return a(), e.apply(this, arguments) }, l[t].prototype = e.prototype) : l[t] = e })(vt, bt[vt])
     }();
 
-    function button(content, callback) {
-        let button = document.createElement('button');
-        let $button = $(button);
-        $button.html(content);
-        $button.css({
-            background: '#fafafa',
-            border: '1px solid #e9e9e9',
-            width: '32px',
-            height: '32px',
-            fontSize: '1.2em',
-            fontFamily: 'Symbola, "Times New Roman", serif',
-            padding: '4px',
-            margin: '1px',
-            color: '#31708f'
-        });
-        $button.find('sup').css('font-size', '0.5em');
-        $button.find('sub').css('font-size', '0.5em');
-        $button.on('click', function (e) {
-            callback();
-            e.preventDefault();
-        });
-        return button;
+    function add(field, $controls, buttons) {
+        for (let text in buttons) {
+            if (!buttons.hasOwnProperty(text)) {
+                continue;
+            }
+            let button = document.createElement('button');
+            let $button = $(button);
+            $button.html(text);
+            $button.css({
+                border: 'none',
+                width: '40px',
+                height: '40px',
+                fontSize: '1.2em',
+                fontFamily: 'Symbola, "Times New Roman", serif',
+                padding: '6px',
+                margin: '0',
+                outline: 'none',
+                cursor: 'pointer'
+            });
+            $button.find('sup').css('font-size', '0.5em');
+            $button.find('sub').css('font-size', '0.5em');
+            $button.addClass('btn btn-primary');
+            $button.on('click', event => {
+                buttons[text]();
+                field.focus();
+                event.preventDefault();
+            });
+            $controls.append($button);
+        }
     }
 
     function controls(field) {
@@ -46,63 +53,43 @@ define(['jquery'], function ($) {
             width: '90%',
             marginBottom: '2px'
         });
-        $controls.append(button('&radic;', function () {
-            field.cmd('\\sqrt');
-            field.focus();
-        }));
-        $controls.append(button('&int;', function () {
-            field.cmd('\\int');
-            field.focus();
-        }));
-        $controls.append(button('&int;<sub>0</sub><sup>1</sup>', function () {
-            field.cmd('\\int');
-            field.typedText('_0');
-            field.moveToRightEnd();
-            field.typedText('^1');
-            field.moveToRightEnd();
-            field.focus();
-        }));
-        $controls.append(button('&sum;', function () {
-            field.cmd('\\sum');
-            field.focus();
-        }));
-        $controls.append(button('lim', function () {
-            field.cmd('\\lim');
-            field.typedText('_');
-            field.write('x').cmd('\\to').write('0');
-            field.moveToRightEnd();
-            field.focus();
-        }));
-        $controls.append(button('bin', function () {
-            field.cmd('\\choose');
-            field.focus();
-        }));
-        $controls.append(button('/', function () {
-            field.select().cmd('\\frac');
-            field.focus();
-        }));
-        $controls.append(button('&plusmn;', function () {
-            field.cmd('\\pm');
-            field.focus();
-        }));
-        $controls.append(button('&theta;', function () {
-            field.cmd('\\theta');
-            field.focus();
-        }));
-        $controls.append(button('&pi;', function () {
-            field.cmd('\\pi');
-            field.focus();
-        }));
-        $controls.append(button('&infin;', function () {
-            field.cmd('\\infinity');
-            field.focus();
-        }));
+
+        // It is also possible to render \\[ \\binom{n}{k} \\] with MathJax.
+        // Using MathQuill's HTML output is slightly less clean, but we avoid using YUI and MathJax.
+        let nchoosek = '<div class="mq-math-mode" style="cursor:pointer;font-size:100%;">';
+        nchoosek += '<span class="mq-root-block">';
+        nchoosek += '<span class="mq-non-leaf">';
+        nchoosek += '<span class="mq-paren mq-scaled" style="transform: scale(0.8, 1.5);" >(</span>';
+        nchoosek += '<span class="mq-non-leaf" style="margin-top:0;">';
+        nchoosek += '<span class="mq-array mq-non-leaf">';
+        nchoosek += '<span style="font-size: 14px;"><var>n</var></span>';
+        nchoosek += '<span style="font-size: 14px;"><var>k</var></span>';
+        nchoosek += '</span></span>';
+        nchoosek += '<span class="mq-paren mq-scaled" style="transform: scale(0.8, 1.5);">)</span></span>';
+        nchoosek += '</span></div>';
+
+        add(field, $controls, {
+            '&radic;': () => field.cmd('\\sqrt'),
+            '&int;': () => field.cmd('\\int'),
+            '&int;<sub>0</sub><sup>1</sup>': () => {
+                field.cmd('\\int');
+                field.typedText('_0').moveToRightEnd();
+                field.typedText('^1').moveToRightEnd();
+            },
+            '&sum;': () => field.cmd('\\sum'),
+            'lim': () => field.cmd('\\lim').typedText('_').write('x').cmd('\\to').write('0').moveToRightEnd(),
+            [nchoosek]: () => field.cmd('\\choose'),
+            '/': () => field.select().cmd('\\frac'),
+            '&plusmn;': () => field.cmd('\\pm'),
+            '&theta;': () => field.cmd('\\theta'),
+            '&pi;': () => field.cmd('\\pi'),
+            '&infin;': () => field.cmd('\\infinity'),
+        });
         return controls;
     }
 
     return {
-        initialize: function () {
-            console.log('MathExp entry point');
+        initialize: () => {
             let $input = $('.mathexp .answer input');
             if ($input.length === 0) {
                 return;
@@ -112,9 +99,7 @@ define(['jquery'], function ($) {
             let MQ = MathQuill.getInterface(2);
             let field = MQ.MathField(wrapper, {
                 handlers: {
-                    edit: function () {
-                        $input.val('\\[ ' + field.latex() + ' \\]');
-                    }
+                    edit: () => $input.val('\\[ ' + field.latex() + ' \\]')
                 },
                 spaceBehavesLikeTab: true
             });
