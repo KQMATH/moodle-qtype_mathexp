@@ -33,6 +33,8 @@ require_once($CFG->dirroot . '/question/type/regexp/questiontype.php');
  */
 class qtype_mathexp extends qtype_regexp {
 
-
+    public function extra_question_fields() {
+        return ['qtype_mathexp', 'usehint', 'usecase', 'studentshowalternate'];
+    }
 
 }
