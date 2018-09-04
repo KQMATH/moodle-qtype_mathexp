@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Visual math regular expression';
+$string['pluginname'] = 'Simple Mathematics Regexp';
 $string['pluginname_help'] = 'Regular expressions with a visual math input, resulting in LaTeX answers.';
 $string['pluginname_link'] = 'question/type/mathexp';
 $string['pluginnameadding'] = 'Adding a MathExp question';
